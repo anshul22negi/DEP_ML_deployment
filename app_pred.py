@@ -90,7 +90,7 @@ def predict():
         
         file = request.files['file']
         filename = file.filename
-        file_path = os.path.join(dirname(abspath(__file__)),'static', filename)                       #slashes should be handeled properly
+        file_path = os.path.join('static', filename)                       #slashes should be handeled properly
         file.save(file_path)
         print(filename)
         product = prediction(file_path)
