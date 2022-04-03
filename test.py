@@ -12,10 +12,8 @@ from keras import optimizers
 import matplotlib.pylab as plt
 import numpy as np
 import cv2
-import seaborn as sns
 import random
 import pandas as pd
-from sklearn.metrics import classification_report,confusion_matrix
 print("Version ", tf.__version__)
 print("Eager mode:", tf.executing_eagerly())
 print("Hub version: ", hub.__version__)
@@ -26,8 +24,8 @@ test_dir = os.path.join(data_dir, 'test')
 import time
 import os
 from os.path import exists
-import pickle
-from keras.models import model_from_yaml
+import os.path as path
+from os.path import dirname
 
 def count(dir, counter=0):
     "returns number of files in dir and subdirs"
@@ -131,13 +129,7 @@ plt.xlabel("Training Steps")
 plt.show()
 class_names = ["Class " + classes[i] for i in range(len(classes))]
 
-model_save_file = 'mobilenet_model.yaml'
-# serialize model to YAML
-model_yaml = model.to_yaml()
-with open(model_save_file, "w") as yaml_file:
-    yaml_file.write(model_yaml)
-# serialize weights to HDF5
-model.save_weights("mobilenet_model.h5")
+model.save(os.path.join(dirname(__file__),"models","mobilenet_model"))
 print("Saved model to disk")
 
 def load_image(filename):
