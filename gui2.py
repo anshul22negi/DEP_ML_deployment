@@ -7,7 +7,6 @@ from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.applications.vgg16 import decode_predictions
 from tensorflow.keras.models import model_from_yaml
 import cv2
-import pickle
 import os
 import tensorflow_hub as hub
 
