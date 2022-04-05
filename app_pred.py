@@ -8,7 +8,6 @@ from tensorflow.keras.preprocessing import image
 from flask import Flask, render_template, request
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.models import model_from_json
 import tensorflow_hub as hub
 from os.path import dirname, abspath
 import cv2
@@ -22,10 +21,9 @@ def get_model():
     json_file.close()
     model = model_from_json(loaded_model_json, custom_objects={'KerasLayer': hub.KerasLayer})
     """
-    model_file_path = os.path.join(dirname(__file__), 'models','mobilenet_model')
+    model_file_path = os.path.join(dirname(__file__), 'models','train_model.h')
     model  = load_model(model_file_path)
     # load weights into new model
-    model.load_weights("mobilenet_model.h5")
     print("Model loaded!")
     
 def load_image(img_path):
