@@ -1,2 +1,2 @@
-web gunicorn app_pred:app_pred
+web gunicorn app:app
 heroku ps:scale web=1
