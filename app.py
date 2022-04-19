@@ -40,6 +40,9 @@ def load_image(img_path):
 IMAGE_SHAPE = (224, 224)
 BATCH_SIZE = 32
 
+with open('classes.json') as json_file:
+    classes = json.load(json_file)
+    
 def predict_class(image):
     print(image.shape)
     probabilities = model.predict(np.asarray([image]))[0]
@@ -48,8 +51,7 @@ def predict_class(image):
     return {classes[class_idx]: probabilities[class_idx]}
 
 
-with open('classes.json') as json_file:
-    classes = json.load(json_file)
+
 
 def prediction(img_path):
     new_image = load_image(img_path)
