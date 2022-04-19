@@ -93,7 +93,7 @@ model.compile(
    optimizer=tf.keras.optimizers.Adam(lr=LEARNING_RATE), 
    loss='categorical_crossentropy',
    metrics=['accuracy'])
-EPOCHS=1
+EPOCHS=10
 
 history = model.fit(
         train_generator,
