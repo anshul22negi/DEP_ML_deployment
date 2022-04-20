@@ -12,6 +12,8 @@ import tensorflow_hub as hub
 from os.path import dirname, abspath
 import cv2
 import json
+from collections import defaultdict
+
 
 app = Flask(__name__)
 def get_model():
@@ -42,7 +44,9 @@ BATCH_SIZE = 32
 
 with open('classes.json') as json_file:
     classes = json.load(json_file)
-    
+
+classes = {int(k):v for k,v in classes.items()}
+
 def predict_class(image):
     print(image.shape)
     probabilities = model.predict(np.asarray([image]))[0]
