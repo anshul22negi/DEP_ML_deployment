@@ -11,6 +11,9 @@ from tensorflow.keras.preprocessing.image import img_to_array
 import tensorflow_hub as hub
 from os.path import dirname, abspath
 import cv2
+import json
+from collections import defaultdict
+
 
 app = Flask(__name__)
 def get_model():
@@ -38,28 +41,11 @@ def load_image(img_path):
 
 IMAGE_SHAPE = (224, 224)
 BATCH_SIZE = 32
-data_dir = 'dataset'
-train_dir = os.path.join(data_dir, 'train')
 
-train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-  rescale = 1./255,
-  rotation_range=40,
-  horizontal_flip=True,
-  width_shift_range=0.2, 
-  height_shift_range=0.2,
-  shear_range=0.2, 
-  zoom_range=0.2,
-  fill_mode='nearest' )
+with open('classes.json') as json_file:
+    classes = json.load(json_file)
 
-train_generator = train_datagen.flow_from_directory(
-    train_dir, 
-    subset="training", 
-    shuffle=True, 
-    seed=42,
-    color_mode="rgb", 
-    class_mode="categorical",
-    target_size=IMAGE_SHAPE,
-    batch_size=BATCH_SIZE)
+classes = {int(k):v for k,v in classes.items()}
 
 def predict_class(image):
     print(image.shape)
@@ -68,7 +54,8 @@ def predict_class(image):
     
     return {classes[class_idx]: probabilities[class_idx]}
 
-classes = {j: i for i, j in train_generator.class_indices.items()}
+
+
 
 def prediction(img_path):
     new_image = load_image(img_path)
