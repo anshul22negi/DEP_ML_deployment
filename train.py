@@ -88,26 +88,26 @@ model.add(tf.keras.layers.Dense(train_generator.num_classes, activation='softmax
                          
 
 LEARNING_RATE = 0.003
+with tf.device('/gpu:0'):
+    model.compile(
+    optimizer=tf.keras.optimizers.Adam(lr=LEARNING_RATE), 
+    loss='categorical_crossentropy',
+    metrics=['accuracy'])
+    EPOCHS=20
 
-model.compile(
-   optimizer=tf.keras.optimizers.Adam(lr=LEARNING_RATE), 
-   loss='categorical_crossentropy',
-   metrics=['accuracy'])
-EPOCHS=1
+    history = model.fit(
+            train_generator,
+            steps_per_epoch=train_generator.samples//train_generator.batch_size,
+            epochs=EPOCHS,
+            validation_data=validation_generator,
+            validation_steps=validation_generator.samples//validation_generator.batch_size)
+    acc = history.history['accuracy']
+    val_acc = history.history['val_accuracy']
 
-history = model.fit(
-        train_generator,
-        steps_per_epoch=train_generator.samples//train_generator.batch_size,
-        epochs=EPOCHS,
-        validation_data=validation_generator,
-        validation_steps=validation_generator.samples//validation_generator.batch_size)
-acc = history.history['accuracy']
-val_acc = history.history['val_accuracy']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
 
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-
-epochs_range = range(EPOCHS)
+    epochs_range = range(EPOCHS)
 
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2, 1)
