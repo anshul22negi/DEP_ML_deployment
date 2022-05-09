@@ -63,7 +63,7 @@ def prediction(img_path):
     pred = predict_class(new_image)
     
     ans = "PREDICTED: class: %s, confidence: %f" % (list(pred.keys())[0], list(pred.values())[0])
-    return ans
+    return ans,list(pred.values())[0] 
     
 get_model()
 
@@ -82,10 +82,12 @@ def predict():
         file_path = os.path.join('static', filename)                       #slashes should be handeled properly
         file.save(file_path)
         print(filename)
-        product = prediction(file_path)
+        product, confidence_value = prediction(file_path)
         print(product)
+    if confidence_value > 0.5:    
+        return render_template('predict.html', product = product, user_image = file_path)            #file_path can or may used at the place of filename
+    else:
+        return render_template('manual_prediction.html', user_image = file_path)
         
-    return render_template('predict.html', product = product, user_image = file_path)            #file_path can or may used at the place of filename
-
 if __name__ == "__main__":
     app.run()
