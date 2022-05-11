@@ -45,14 +45,18 @@ BATCH_SIZE = 32
 with open('classes.json') as json_file:
     classes = json.load(json_file)
 
+with open('links.json') as json_file:
+    links = json.load(json_file)
+    
 classes = {int(k):v for k,v in classes.items()}
+links = {int(k):v for k,v in links.items()}
 
 def predict_class(image):
     print(image.shape)
     probabilities = model.predict(np.asarray([image]))[0]
     class_idx = np.argmax(probabilities)
     
-    return {classes[class_idx]: probabilities[class_idx]}
+    return {classes[class_idx]: probabilities[class_idx]}, class_idx
 
 
 
@@ -60,10 +64,15 @@ def predict_class(image):
 def prediction(img_path):
     new_image = load_image(img_path)
     
-    pred = predict_class(new_image)
-    
+    pred,class_idx = predict_class(new_image)
+    link = links[class_idx]
+    if link[0]=='h':
+        reference = "Find more information about this disease at: " 
+    else:
+        reference = "The given sample strongly indicates a healthy crop"
+        link = ""
     ans = "PREDICTED: class: %s, confidence: %f" % (list(pred.keys())[0], list(pred.values())[0])
-    return ans,list(pred.values())[0] 
+    return ans,list(pred.values())[0],reference, link
     
 get_model()
 
@@ -82,10 +91,10 @@ def predict():
         file_path = os.path.join('static', filename)                       #slashes should be handeled properly
         file.save(file_path)
         print(filename)
-        product, confidence_value = prediction(file_path)
+        product, confidence_value, reference, link = prediction(file_path)
         print(product)
     if confidence_value > 0.5:    
-        return render_template('predict.html', product = product, user_image = file_path)            #file_path can or may used at the place of filename
+        return render_template('predict.html', product = product, user_image = file_path, reference = reference, link = link)            #file_path can or may used at the place of filename
     else:
         return render_template('manual_prediction.html', user_image = file_path)
         
