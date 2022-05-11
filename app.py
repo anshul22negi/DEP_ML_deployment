@@ -71,7 +71,12 @@ def prediction(img_path):
     else:
         reference = "The given sample strongly indicates a healthy crop"
         link = ""
-    ans = "PREDICTED: class: %s, confidence: %f" % (list(pred.keys())[0], list(pred.values())[0])
+    diseases_split = list(pred.keys())[0].split('_')
+    disease =""
+    for i in diseases_split:
+        disease += " " + i
+    print(type(disease))
+    ans = "PREDICTED: class: %s, confidence: %f%%" % (disease, list(pred.values())[0]*100)
     return ans,list(pred.values())[0],reference, link
     
 get_model()
