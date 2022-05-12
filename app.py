@@ -76,7 +76,7 @@ def prediction(img_path):
     for i in diseases_split:
         disease += " " + i
     print(type(disease))
-    ans = "PREDICTED: class: %s, confidence: %f%%" % (disease, list(pred.values())[0]*100)
+    ans = "PREDICTED class: %s with confidence: %f%%" % (disease, list(pred.values())[0]*100)
     return ans,list(pred.values())[0],reference, link
     
 get_model()
